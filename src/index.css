@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* global font */
+html,
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: #0A1B16;
+  overscroll-behavior: none;
+}
+
+
+/* serif headings */
+.font-serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.grecaptcha-badge {
+  transform: scale(0.55);
+  transform-origin: bottom right;
+  opacity: 0.6;
+}
