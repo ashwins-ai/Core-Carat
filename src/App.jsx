@@ -9,12 +9,26 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-import Logo from '/Users/sai/Personal/Core Carat/core-carat/src/assets/Logo.png';
+import Logo from './assets/Logo.png';
 import Appointment from "./Pages/Appointment";
-import bgi1 from "./assets/bgi1.png";
-import img1 from "./assets/img2.jpg";
-import img2 from "./assets/img1.jpg";
+import bgi1 from './assets/bgi1.png';
+import img1 from './assets/img2.jpg';
+import img2 from './assets/img1.jpg';
 /* ---------------- SCROLL REVEAL ---------------- */
+const PageLoader = () => (
+  <div className="fixed inset-0 z-[99999] bg-[#0A1B16] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-6">
+      <img
+        src={Logo}
+        alt="Core Carat"
+        className="h-16 opacity-90 animate-pulse"
+      />
+      <span className="text-white/60 text-[10px] tracking-[0.4em] uppercase">
+        Loading
+      </span>
+    </div>
+  </div>
+);
 
 const ScrollReveal = ({ children, direction = 'up', delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -244,6 +258,15 @@ const FAQSection = () => {
 export default function App() {
   const [view, setView] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fallback = setTimeout(() => {
+      setIsLoading(false);
+    }, 8000); // 8s safety net
+
+    return () => clearTimeout(fallback);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50);
@@ -252,241 +275,256 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FBFBF9] font-sans">
+    <>
+      {isLoading && <PageLoader />}
+      <div
+        className={`min-h-screen bg-[#FBFBF9] font-sans transition-opacity duration-700 ${isLoading ? "opacity-0" : "opacity-100"
+          }`}
+      >
 
-      {/* NAVBAR */}
-      {view === "home" && (
-        <nav
-          className={`fixed w-full z-40 transition-all duration-700 px-6 md:px-12 pt-[calc(env(safe-area-inset-top)+3.5rem)] pb-8 md:pt-10 md:pb-10
+        {/* NAVBAR */}
+        {view === "home" && (
+          <nav
+            className={`fixed w-full z-40 transition-all duration-700 px-6 md:px-12 pt-[calc(env(safe-area-inset-top)+3.5rem)] pb-8 md:pt-10 md:pb-10
  ${isScrolled
-              ? 'bg-[#0b1a15]/95 backdrop-blur-md shadow-sm'
-              : 'bg-transparent text-white'
-            }`}
-        >
-          <div className="max-w-8xl mx-auto relative flex items-center justify-between">
+                ? 'bg-[#0b1a15]/95 backdrop-blur-md shadow-sm'
+                : 'bg-transparent text-white'
+              }`}
+          >
+            <div className="max-w-8xl mx-auto relative flex items-center justify-between">
 
 
-            {/* CENTER LOGO — ALL SCREENS */}
-            <button
-              onClick={() => setView("home")}
-              className="
+              {/* CENTER LOGO — ALL SCREENS */}
+              <button
+                onClick={() => setView("home")}
+                className="
     absolute left-1/2 -translate-x-1/2
     md:static md:translate-x-1/2
   "
-            >
-              <img
-                src={Logo}
-                alt="Core-Carat"
-                className="h-10 md:h-20 object-contain"
-              />
-            </button>
+              >
+                <img
+                  src={Logo}
+                  alt="Core-Carat"
+                  className="h-10 md:h-20 object-contain"
+                />
+              </button>
 
 
 
-            {/* DESKTOP ONLY BUTTON */}
-            <button
-              onClick={() => setView("appointment")}
-              className="hidden md:block px-6 py-4 border border-white/40 text-white
+              {/* DESKTOP ONLY BUTTON */}
+              <button
+                onClick={() => setView("appointment")}
+                className="hidden md:block px-6 py-4 border border-white/40 text-white
                uppercase tracking-[0.3em] text-[10px]
                hover:bg-white hover:text-[#0A1B16] transition-all"
-            >
-              Request Catalogue
-            </button>
+              >
+                Request Catalogue
+              </button>
 
-          </div>
-        </nav>
-      )
-      }
+            </div>
+          </nav>
+        )
+        }
 
-      {/* HOME PAGE */}
-      {
-        view === 'home' && (
-          <>
-            {/* HERO */}
-            <div className="relative h-screen w-full flex items-center justify-center bg-emerald-950 overflow-hidden">
+        {/* HOME PAGE */}
+        {
+          view === 'home' && (
+            <>
+              {/* HERO */}
+              <div className="relative min-h-[100svh] w-full flex items-center justify-center bg-emerald-950 overflow-hidden">
 
-              <img
-                src={bgi1}
-                alt="Core Carat Hero"
-                className="
+
+                <img
+                  src={bgi1}
+                  alt="Core Carat Hero"
+                  onLoad={() => {
+                    setIsLoading(false);
+                    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                  }}
+                  className="
     absolute inset-0 h-full w-full object-cover opacity-50
     object-[28.5%_center]
     md:object-center
   "
-              />
-
-              <div className="relative z-30 text-center text-white px-6 md:left-80">
+                />
 
 
-                <ScrollReveal>
-                  <span className="uppercase tracking-[0.6em] text-[10px] md:text-xs mb-6 block opacity-70">
-                    Precision • Structure • Permanence
-                  </span>
+                <div className="relative z-30 text-center text-white px-6 md:absolute md:right-24 md:max-w-5xl">
 
-                  <h1 className="text-6xl md:text-9xl font-serif italic mb-8 leading-tight">
-                    Built From the Core.
-                  </h1>
 
-                  <p className="max-w-xl mx-auto font-light text-base md:text-xl opacity-80 leading-relaxed mb-12">
-                    Some moments deserve more than a memory, they deserve to last forever. Made with intention. Meant to last. Worn to feel.
-                  </p>
+                  <ScrollReveal>
+                    <span className="uppercase tracking-[0.6em] text-[10px] md:text-xs mb-6 block opacity-70">
+                      Precision • Structure • Permanence
+                    </span>
 
-                  <button
-                    onClick={() => setView('appointment')}
-                    className="bg-white text-emerald-950 px-10 py-4 uppercase tracking-[0.3em] text-xs font-semibold hover:bg-[#FBFBF9] transition-all"
-                  >
-                    Request Catalogue
-                  </button>
-                </ScrollReveal>
+                    <h1 className="text-6xl md:text-9xl font-serif italic mb-8 leading-tight">
+                      Built From the Core.
+                    </h1>
+
+                    <p className="max-w-xl mx-auto font-light text-base md:text-xl opacity-80 leading-relaxed mb-12">
+                      Some moments deserve more than a memory, they deserve to last forever. Made with intention. Meant to last. Worn to feel.
+                    </p>
+
+                    <button
+                      onClick={() => setView('appointment')}
+                      className="bg-white text-emerald-950 px-10 py-4 uppercase tracking-[0.3em] text-xs font-semibold hover:bg-[#FBFBF9] transition-all"
+                    >
+                      Request Catalogue
+                    </button>
+                  </ScrollReveal>
+                </div>
               </div>
-            </div>
 
-            <Section
-              subtitle="What Makes"
-              title={
-                <>
-                  Lab-Grown
-                  <br />
-                  <i className="font-light"> Diamonds</i>
-                  <br />
-                  Better?
-                </>
-              }
-              content="Because wanting something beautiful shouldn’t come with second thoughts.
+              <Section
+                subtitle="What Makes"
+                title={
+                  <>
+                    Lab-Grown
+                    <br />
+                    <i className="font-light"> Diamonds</i>
+                    <br />
+                    Better?
+                  </>
+                }
+                content="Because wanting something beautiful shouldn’t come with second thoughts.
 Our diamonds are grown using advanced technology to mirror nature, without the environmental cost or ethical uncertainty. What you get is pure brilliance, exceptional quality, and a diamond that’s every bit as real as the love or intention behind it.
 "
-              image={img1}
-            />
-            <Promises />
+                image={img1}
+              />
+              <Promises />
 
-            <Section
-              reverse
-              subtitle="Begin Your Journey"
-              title={
-                <>
-                  Request the <br />
-                  <i className="font-light">Core Carat Catalogue</i>
-                </>
-              }
-              content={
-                <>
-                  <p className="mb-10">
-                    Explore our curated collection of precision-engineered diamond jewellery.
-                    Receive detailed specifications, pricing ranges, and design possibilities
-                    tailored to your requirements.
-                  </p>
+              <Section
+                reverse
+                subtitle="Begin Your Journey"
+                title={
+                  <>
+                    Request the <br />
+                    <i className="font-light">Core Carat Catalogue</i>
+                  </>
+                }
+                content={
+                  <>
+                    <p className="mb-10">
+                      Explore our curated collection of precision-engineered diamond jewellery.
+                      Receive detailed specifications, pricing ranges, and design possibilities
+                      tailored to your requirements.
+                    </p>
 
-                  <button
-                    onClick={() => setView("appointment")}
-                    className="
+                    <button
+                      onClick={() => setView("appointment")}
+                      className="
           border border-[#0A1B16]/90
           px-12 py-5
           uppercase tracking-[0.4em] text-[10px] font-semibold
           hover:bg-[#0A1B16] hover:text-white
           transition-all
         "
-                  >
-                    Request Catalogue
-                  </button>
-                </>
-              }
-              image={img2}
-            />
+                    >
+                      Request Catalogue
+                    </button>
+                  </>
+                }
+                image={img2}
+              />
 
-          </>
-        )
-      }
+            </>
+          )
+        }
 
-      {/* ✅ THIS WAS MISSING */}
-      {view === "appointment" && (
-        <div className="fixed inset-0 z-[9999] bg-[#FBFBF9] overflow-y-auto">
-          <Appointment goHome={() => setView("home")} />
-        </div>
-      )}
-
-
-      <FAQSection />
+        {/* ✅ THIS WAS MISSING */}
+        {view === "appointment" && (
+          <div className="fixed inset-0 z-[9999] bg-[#FBFBF9] overflow-y-auto">
+            <Appointment goHome={() => setView("home")} />
+          </div>
+        )}
 
 
-      <footer className="bg-[#0A1B16] text-white/70 px-6 md:px-12 py-20">
-        <div className="max-w-7xl mx-auto">
+        <FAQSection />
 
-          {/* TOP */}
-          <div className="flex flex-col md:flex-row md:justify-between gap-16">
 
-            {/* BRAND */}
-            <div className="max-w-sm">
-              <div className="text-xl font-serif tracking-[0.25em] text-white mb-4">
-                CORE CARAT
+        <footer className="bg-[#0A1B16] text-white/70 px-6 md:px-12 py-20">
+          <div className="max-w-7xl mx-auto">
+
+            {/* TOP */}
+            <div className="flex flex-col md:flex-row md:justify-between gap-16">
+
+              {/* BRAND */}
+              <div className="max-w-sm">
+                <div className="text-xl font-serif tracking-[0.25em] text-white mb-4">
+                  CORE CARAT
+                </div>
+
+                <p className="text-sm font-light leading-relaxed">
+                  Precision-engineered lab-grown diamond jewellery.
+                  Designed with intention. Crafted to endure.
+                </p>
               </div>
 
-              <p className="text-sm font-light leading-relaxed">
-                Precision-engineered lab-grown diamond jewellery.
-                Designed with intention. Crafted to endure.
-              </p>
-            </div>
+              {/* CONTACT */}
+              <div>
+                <h4 className="uppercase tracking-[0.3em] text-[10px] text-white mb-6">
+                  Contact
+                </h4>
 
-            {/* CONTACT */}
-            <div>
-              <h4 className="uppercase tracking-[0.3em] text-[10px] text-white mb-6">
-                Contact
-              </h4>
+                <ul className="space-y-4 text-sm font-light">
+                  <li>Surat, India</li>
+                  <li>
+                    <a
+                      href="mailto:info@corecarat.com"
+                      className="hover:text-white transition-colors"
+                    >
+                      info@corecarat.com
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-              <ul className="space-y-4 text-sm font-light">
-                <li>Surat, India</li>
-                <li>
-                  <a
-                    href="mailto:concierge@corecarat.com"
-                    className="hover:text-white transition-colors"
-                  >
-                    concierge@corecarat.com
-                  </a>
-                </li>
-              </ul>
-            </div>
+              {/* CTA */}
+              <div>
+                <h4 className="uppercase tracking-[0.3em] text-[10px] text-white mb-6">
+                  Catalogue
+                </h4>
 
-            {/* CTA */}
-            <div>
-              <h4 className="uppercase tracking-[0.3em] text-[10px] text-white mb-6">
-                Catalogue
-              </h4>
-
-              <button
-                onClick={() => setView("appointment")}
-                className="
+                <button
+                  onClick={() => setView("appointment")}
+                  className="
             border border-white/40
             px-8 py-3
             uppercase tracking-[0.3em] text-[10px] font-semibold
             hover:bg-white hover:text-[#0A1B16]
             transition-all
           "
-              >
-                Request Catalogue
-              </button>
+                >
+                  Request Catalogue
+                </button>
+              </div>
+
+            </div>
+
+            {/* DIVIDER */}
+            <div className="border-t border-white/10 my-16" />
+
+            {/* BOTTOM */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-widest text-white/50">
+              <p>
+                © {new Date().getFullYear()} Core-Carat. All rights reserved.
+              </p>
+
+              <div className="flex gap-8">
+                <span>Lab-Grown Diamonds</span>
+                <span>Made-to-Order</span>
+                <span>India</span>
+              </div>
             </div>
 
           </div>
-
-          {/* DIVIDER */}
-          <div className="border-t border-white/10 my-16" />
-
-          {/* BOTTOM */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-widest text-white/50">
-            <p>
-              © {new Date().getFullYear()} Core-Carat. All rights reserved.
-            </p>
-
-            <div className="flex gap-8">
-              <span>Lab-Grown Diamonds</span>
-              <span>Made-to-Order</span>
-              <span>India</span>
-            </div>
-          </div>
-
-        </div>
-      </footer>
+        </footer>
 
 
-    </div >
+      </div >
+      );
+
+    </>
   );
+
 }
